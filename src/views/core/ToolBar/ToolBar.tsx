@@ -68,6 +68,22 @@ const LateralMenu: Component = () => {
     </div>
   );
 
+  const handleFullScreen = () => {
+    // If the document is not in fullscreen mode, request fullscreen on the <html> element
+    if (!document.fullscreenElement) {
+      document.documentElement
+        .requestFullscreen()
+        .catch((err) =>
+          console.error("Error attempting to enable full-screen mode:", err)
+        );
+    } else {
+      // Otherwise, exit fullscreen mode
+      document.exitFullscreen().catch((err) =>
+        console.error("Error attempting to exit full-screen mode:", err)
+      );
+    }
+  };
+
   return (
     <div class="z-20 fixed bottom-[22px] inset-x-[17px] bg-bgd-100 rounded-[10px] h-[48px] border border-white/20 backdrop-blur-[30px] grid grid-cols-5 items-center px-4">
 
@@ -159,7 +175,7 @@ const LateralMenu: Component = () => {
         <Button
           name="Fullscreen"
           icon={<FullscreenIcon />}
-          onClick={() => void 0}
+          onClick={handleFullScreen}
         />
       </div>
 

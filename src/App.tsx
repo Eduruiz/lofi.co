@@ -7,6 +7,7 @@ import ActiveScene from "./views/core/ActiveScene/ActiveScene";
 import ScenePicker from "./views/core/ScenePicker/ScenePicker";
 import ToolBar from "./views/core/ToolBar/ToolBar";
 import AudioMixer from "./views/core/AudioMixer/AudioMixer";
+import Pomodoro from "./components/Pomodoro";
 
 /**
  * Main entry point for the application.
@@ -18,6 +19,7 @@ const App: Component = () => {
         <ScenePicker />
       </Show>
 
+      <Pomodoro />
       <ActiveScene />
       <ToolBar />
 
