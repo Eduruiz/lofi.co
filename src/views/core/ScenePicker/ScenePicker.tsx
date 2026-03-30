@@ -1,6 +1,7 @@
 import { For, Show, createSignal, type Component } from "solid-js";
 import { type SceneSet, sceneSets } from "../../../data/scene.data";
 import { setCurrentScene } from "../../../stores/scene";
+import effects from "../../../stores/effects";
 
 const SceneSelector: Component = () => {
   const [sceneSelected, setSceneSelected] = createSignal<SceneSet | null>(null);
@@ -28,7 +29,7 @@ const SceneSelector: Component = () => {
             <For each={selected().scenes}>
               {scene => (
                 <button type="button" class="flex-shrink-0" onClick={
-                  () => setCurrentScene(scene)
+                  () => { effects.resetAll(); setCurrentScene(scene); }
                 }>
                   <img src={scene.thumbnail} alt={selected().name} class="w-[360px]" />
                 </button>
