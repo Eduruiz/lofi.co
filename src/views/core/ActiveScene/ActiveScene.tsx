@@ -1,6 +1,7 @@
 import { For, type Component, createMemo, Show, createSignal } from "solid-js";
 import clsx from 'clsx';
 import { HoverCard } from "@kobalte/core/hover-card";
+import { Slider } from "@kobalte/core/slider";
 
 import "../../../assets/styles/ActiveScene.css";
 import { Action } from "../../../data/scene.data";
@@ -46,7 +47,7 @@ const ActiveScene: Component = () => {
   });
 
   return (
-    <div class="background-video-scroll relative flex overflow-scroll h-screen w-screen">
+    <div class="background-video-scroll relative flex overflow-hidden h-screen w-screen">
       <For each={Object.keys(currentScene().variants)}>
         {(variant) => (
           <div class="background-video">
@@ -115,13 +116,14 @@ const EffectPoint = (props: EffectPointProps) => {
 
           {action.type === "sound" &&
             <Show when={isEffectOn(action.effect)}>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={effects.volume()[action.effect] * 100}
-                onInput={(e) => setEffectVolume(action.effect, e.currentTarget.valueAsNumber / 100)}
-              />
+              <Slider class="w-[120px]" value={[effects.volume()[action.effect]]} onChange={(v) => setEffectVolume(action.effect, v[0])} minValue={0} maxValue={1} step={0.05}>
+                <Slider.Track class="h-2 bg-[#fff2] relative rounded-2xl">
+                  <Slider.Fill class="bg-primary h-full absolute rounded-2xl" />
+                  <Slider.Thumb class="bg-primary w-5 h-5 rounded-full top-[-6px]">
+                    <Slider.Input />
+                  </Slider.Thumb>
+                </Slider.Track>
+              </Slider>
             </Show>}
         </HoverCard.Content>
       </HoverCard.Portal>

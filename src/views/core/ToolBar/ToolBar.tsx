@@ -2,9 +2,10 @@ import { type Component, Show, type VoidComponent, type JSX, createSignal } from
 import { AudioState } from "@solid-primitives/audio";
 import { createDateNow } from "@solid-primitives/date";
 import { Tooltip } from "@kobalte/core/tooltip";
+import { Slider } from "@kobalte/core/slider";
 
 import DarkModeToggle from "../../../components/DarkModeToggle";
-import { setShowAudioMixer, setShowSceneSelector } from "../../../stores/app";
+import { setShowAudioMixer, setShowPomodoro, setShowSceneSelector, setShowTemplates, musicSource, youtubeControls, youtubeIsPlaying } from "../../../stores/app";
 import player from "../../../stores/player";
 import { currentScene, night, setNight, pixelated, setPixelated } from "../../../stores/scene";
 import { hasSupportFor } from "../../../utils/set";
@@ -17,7 +18,8 @@ import VolumeIcon from "../../../assets/icons/volume.svg?component-solid";
 import VolumeMuteIcon from "../../../assets/icons/volume-mute.svg?component-solid";
 import MixerIcon from "../../../assets/icons/mixer.svg?component-solid";
 import ScenesIcon from "../../../assets/icons/scenes.svg?component-solid";
-import ToolsIcon from "../../../assets/icons/tools.svg?component-solid";
+import { RiSystemTimerLine } from "solid-icons/ri";
+import TemplatesIcon from "../../../assets/icons/templates.svg?component-solid";
 import PipIcon from "../../../assets/icons/pip.svg?component-solid";
 import FullscreenIcon from "../../../assets/icons/fullscreen.svg?component-solid";
 import PauseIcon from "../../../assets/icons/pause.svg?component-solid";
@@ -34,6 +36,7 @@ const LateralMenu: Component = () => {
 
   const Button: VoidComponent<{
     active?: boolean
+    disabled?: boolean
     name: string
     icon: JSX.Element,
     onClick: () => void
@@ -41,9 +44,13 @@ const LateralMenu: Component = () => {
     <Tooltip>
       <Tooltip.Trigger
         type="button"
-        class="p-2 hover:(bg-[#fff]/20 scale-110) rounded-lg transition"
-        classList={{ "bg-[#fff]/15": props.active }}
-        onClick={() => props.onClick()}
+        class="p-2 rounded-lg transition"
+        classList={{
+          "bg-[#fff]/15": props.active,
+          "opacity-25 cursor-not-allowed": props.disabled,
+          "hover:(bg-[#fff]/20 scale-110)": !props.disabled,
+        }}
+        onClick={() => !props.disabled && props.onClick()}
       >
         {props.icon}
       </Tooltip.Trigger>
@@ -56,15 +63,19 @@ const LateralMenu: Component = () => {
   );
 
   const [showVolumeSlider, setShowVolumeSlider] = createSignal(false);
+  const volume = () => [player.audio.volume];
+  const changeVolume = (v: number[]) => player.controls.setVolume(v[0]);
+
   const VolumeSlider: VoidComponent = () => (
-    <div class="absolute bottom-[60px] left-[50%] transform translate-x-[-50%] bg-bgd-100 rounded-[10px] h-[52px] border border-white/20 backdrop-blur-[30px] flex justify-between items-center px-4">
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={player.audio.volume * 100}
-        onInput={(e) => player.controls.setVolume(e.currentTarget.valueAsNumber / 100)}
-      />
+    <div class="absolute bottom-[60px] left-[50%] transform translate-x-[-50%] bg-bgd-100 rounded-[10px] h-[52px] w-[180px] border border-white/20 backdrop-blur-[30px] flex items-center px-4">
+      <Slider class="flex-auto" value={volume()} onChange={changeVolume} minValue={0} maxValue={1} step={0.05}>
+        <Slider.Track class="h-2 bg-[#fff2] relative rounded-2xl">
+          <Slider.Fill class="bg-primary h-full absolute rounded-2xl" />
+          <Slider.Thumb class="bg-primary w-5 h-5 rounded-full top-[-6px]">
+            <Slider.Input />
+          </Slider.Thumb>
+        </Slider.Track>
+      </Slider>
     </div>
   );
 
@@ -91,6 +102,11 @@ const LateralMenu: Component = () => {
 
         <p class="text-sm font-medium">{currentTime().toLocaleTimeString("en-US", { hour12: true, hour: "numeric", minute: "numeric" })}</p>
 
+        <Show when={musicSource() === "lofi"}>
+          <div class="h-4 w-[1px] bg-white/20" />
+          <p class="text-xs text-white/40 capitalize">{player.mood()} #{player.trackIndex() + 1}</p>
+        </Show>
+
         <Show when={supportForNight()}>
           <DarkModeToggle dark={night} setDark={setNight} />
         </Show>
@@ -111,18 +127,31 @@ const LateralMenu: Component = () => {
         <Button
           name="Previous track"
           icon={<SkipPreviousIcon />}
+          disabled={musicSource() !== "lofi"}
           onClick={() => player.previousTrack()}
         />
 
         <Button
-          name={player.audio.state === AudioState.PLAYING ? "Pause" : "Play"}
-          icon={player.audio.state === AudioState.PLAYING ? <PauseIcon /> : <PlayIcon />}
-          onClick={() => player.audio.state === AudioState.PLAYING ? player.controls.pause() : player.controls.play()}
+          name={musicSource() === "youtube"
+            ? (youtubeIsPlaying() ? "Pause" : "Play")
+            : (player.audio.state === AudioState.PLAYING ? "Pause" : "Play")}
+          icon={musicSource() === "youtube"
+            ? (youtubeIsPlaying() ? <PauseIcon /> : <PlayIcon />)
+            : (player.audio.state === AudioState.PLAYING ? <PauseIcon /> : <PlayIcon />)}
+          disabled={musicSource() === "spotify"}
+          onClick={() => {
+            if (musicSource() === "youtube") {
+              youtubeControls.toggle();
+            } else {
+              player.audio.state === AudioState.PLAYING ? player.controls.pause() : player.controls.play();
+            }
+          }}
         />
 
         <Button
           name="Next track"
           icon={<SkipNextIcon />}
+          disabled={musicSource() !== "lofi"}
           onClick={() => player.nextTrack()}
         />
 
@@ -151,20 +180,20 @@ const LateralMenu: Component = () => {
           icon={<MixerIcon />}
           onClick={() => setShowAudioMixer(prev => !prev)}
         />
-        {/* <Button
+        <Button
           name="Templates"
           icon={<TemplatesIcon />}
-          onClick={() => void 0}
-        /> */}
+          onClick={() => setShowTemplates(prev => !prev)}
+        />
         <Button
           name="Scenes"
           icon={<ScenesIcon />}
           onClick={() => setShowSceneSelector(prev => !prev)}
         />
         <Button
-          name="Tools"
-          icon={<ToolsIcon />}
-          onClick={() => void 0}
+          name="Pomodoro"
+          icon={<RiSystemTimerLine class="text-xl" />}
+          onClick={() => setShowPomodoro(prev => !prev)}
         />
         <Divider />
         <Button
