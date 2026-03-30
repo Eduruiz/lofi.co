@@ -369,6 +369,17 @@ const playlistsSpotify = {
     url: "https://open.spotify.com/embed/playlist/1lVoSF8Bd6bQJaoEHFGegX?utm_source=generator",
   },
 };
+const playlistsYouTube = {
+  chill: {
+    url: "https://www.youtube.com/embed/jfKfPfyJRdk",
+  },
+  jazzy: {
+    url: "https://www.youtube.com/embed/HuFYqnbVbzY",
+  },
+  sleepy: {
+    url: "https://www.youtube.com/embed/DWcJFNfaw9c",
+  },
+};
 const alarms: string[] = [
   ALARMS_ROOT_URL + "Digital.mp3",
   ALARMS_ROOT_URL + "Easy+Tone.mp3",
@@ -376,4 +387,4 @@ const alarms: string[] = [
   ALARMS_ROOT_URL + "Ringtone.mp3",
   ALARMS_ROOT_URL + "Soft.mp3",
 ];
-export { playlistsBase, playlistsSpotify, effects, alarms };
+export { playlistsBase, playlistsSpotify, playlistsYouTube, effects, alarms };

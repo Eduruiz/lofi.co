@@ -148,11 +148,18 @@ const player = createRoot(() => {
       },
 
       setMuted: (muted: boolean) => setState({ muted }),
-      setMood: (mood: SoundTrackMood) => switchMood(mood)
+      setMood: (mood: SoundTrackMood) => switchMood(mood),
+      setMoodSilent: (mood: SoundTrackMood) => {
+        batch(() => {
+          setState('history', []);
+          setState('playlistMood', mood);
+          setState('currentTrackID', findSuitableTrack());
+        });
+      }
     },
     
     mood: () => state.playlistMood,
-    currentTrackID: state.currentTrackID,
+    trackIndex: () => state.currentTrackID,
 
     nextTrack: handleNextTrack,
     previousTrack: handlePreviousTrack,
