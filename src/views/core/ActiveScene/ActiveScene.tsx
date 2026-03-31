@@ -1,4 +1,4 @@
-import { For, type Component, createMemo, Show, createSignal } from "solid-js";
+import { For, type Component, createMemo, Show, createSignal, createEffect } from "solid-js";
 import clsx from 'clsx';
 import { HoverCard } from "@kobalte/core/hover-card";
 import { Slider } from "@kobalte/core/slider";
@@ -49,16 +49,34 @@ const ActiveScene: Component = () => {
   return (
     <div class="background-video-scroll relative flex overflow-hidden h-screen w-screen">
       <For each={Object.keys(currentScene().variants)}>
-        {(variant) => (
-          <div class="background-video">
-            <video src={currentScene().variants[variant]} preload="auto" autoplay loop muted playsinline
-              class={clsx(
-                "w-full h-full transition-opacity",
-                variant === currentVariant() ? "opacity-100" : "opacity-0"
-              )}
-            ></video>
-          </div>
-        )}
+        {(variant) => {
+          let videoRef: HTMLVideoElement | undefined;
+          const isActive = () => variant === currentVariant();
+          const [visible, setVisible] = createSignal(isActive());
+
+          createEffect(() => {
+            if (!videoRef) return;
+            if (isActive()) {
+              videoRef.play().catch(() => {});
+              setVisible(true);
+            } else {
+              setVisible(false);
+              // Pause after fade-out completes so the frame stays visible during transition
+              setTimeout(() => { if (!isActive()) videoRef?.pause(); }, 800);
+            }
+          });
+
+          return (
+            <div class="background-video">
+              <video ref={videoRef} src={currentScene().variants[variant]} preload="auto" loop muted playsinline
+                class={clsx(
+                  "w-full h-full transition-opacity duration-700",
+                  visible() ? "opacity-100" : "opacity-0"
+                )}
+              ></video>
+            </div>
+          );
+        }}
       </For>
       <div class="background-cta z-10">
         <For each={currentScene().actions}>
