@@ -19,7 +19,7 @@ import { showAudioMixer, setShowAudioMixer, musicSource, setMusicSource, setYout
 const AudioMixer: Component = () => {
 
   // const effects = ["Forest Rain", "Bird Chirping", "Keyboard"]
-  const sceneEffectNames = () => currentScene().actions.filter(a => a.type === "sound").map(a => a.effect);
+  const sceneEffectNames = () => currentScene().actions.flatMap(a => a.type === "sound" ? [a.effect] : []);
 
   const sceneEffects = () => effects.filter(e => sceneEffectNames().includes(e.type))
 
