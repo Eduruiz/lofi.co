@@ -22,3 +22,6 @@ dist
 
 # Locally hosted assets dir
 web_assets
+
+# Netlify cache
+.netlify
