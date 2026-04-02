@@ -6,6 +6,7 @@ import {
   showAudioMixer, setShowAudioMixer,
   showPomodoro, setShowPomodoro,
   showTemplates, setShowTemplates,
+  musicSource, youtubeControls,
 } from "./stores/app";
 import "./stores/session";
 import player from "./stores/player";
@@ -29,7 +30,11 @@ const App: Component = () => {
     switch (e.key) {
       case " ":
         e.preventDefault();
-        player.audio.state === AudioState.PLAYING ? player.controls.pause() : player.controls.play();
+        if (musicSource() === "lofigirl" || musicSource() === "chillhop") {
+          youtubeControls.toggle();
+        } else if (musicSource() === "lofi") {
+          player.audio.state === AudioState.PLAYING ? player.controls.pause() : player.controls.play();
+        }
         break;
       case "ArrowLeft":
         player.previousTrack();

@@ -3,13 +3,15 @@ import { Component, For, Show, ParentProps } from "solid-js";
 import { Slider } from "@kobalte/core/slider";
 import {
   BiSolidMoon, BiSolidCoffee, BiSolidVolume, BiSolidVolumeFull,
-  BiRegularShuffle, BiSolidMusic, BiLogosSpotify, BiLogosYoutube
+  BiRegularShuffle, BiSolidMusic
 } from "solid-icons/bi"
+import LofiGirlIcon from "../../../assets/icons/lofigirl.png"
+import ChillhopIcon from "../../../assets/icons/chillhop.png"
 
 import FloatingWindow from "../../../components/FloatingWindow";
 import SaxIcon from "../../../assets/icons/sax.svg?component-solid"
 import player from "../../../stores/player";
-import { SoundEffect, SoundTrackMood, effects, playlistsSpotify, playlistsYouTube } from "../../../data/audio.data";
+import { SoundEffect, SoundTrackMood, effects, playlistsLofiGirl, playlistsChillhop } from "../../../data/audio.data";
 import effectsStore from "../../../stores/effects";
 import { currentScene } from "../../../stores/scene";
 import { effectIcon } from "../../../data/effect-icons";
@@ -51,11 +53,11 @@ const AudioMixer: Component = () => {
               <SourceButton source="lofi" active={musicSource() === "lofi"} onClick={() => { setMusicSource("lofi"); player.controls.play(); }}>
                 <BiSolidMusic class={"text-lg " + (musicSource() === "lofi" ? "fill-primary" : "fill-white/50")} />
               </SourceButton>
-              <SourceButton source="spotify" active={musicSource() === "spotify"} onClick={() => { setMusicSource("spotify"); player.controls.pause(); }}>
-                <BiLogosSpotify class={"text-lg " + (musicSource() === "spotify" ? "fill-[#1DB954]" : "fill-white/50")} />
+              <SourceButton source="lofigirl" active={musicSource() === "lofigirl"} onClick={() => { setMusicSource("lofigirl"); player.controls.pause(); }}>
+                <img src={LofiGirlIcon} class={"w-5 h-5 rounded-full object-cover " + (musicSource() === "lofigirl" ? "opacity-100" : "opacity-40")} />
               </SourceButton>
-              <SourceButton source="youtube" active={musicSource() === "youtube"} onClick={() => { setMusicSource("youtube"); player.controls.pause(); }}>
-                <BiLogosYoutube class={"text-lg " + (musicSource() === "youtube" ? "fill-[#FF0000]" : "fill-white/50")} />
+              <SourceButton source="chillhop" active={musicSource() === "chillhop"} onClick={() => { setMusicSource("chillhop"); player.controls.pause(); }}>
+                <img src={ChillhopIcon} class="w-5 h-5 rounded-full object-cover transition" style={{ filter: musicSource() === "chillhop" ? "none" : "brightness(0) invert(1) opacity(0.4)" }} />
               </SourceButton>
             </div>
           </div>
@@ -70,26 +72,15 @@ const AudioMixer: Component = () => {
           </Panel>
         </div>
       </Show>
-      <Show when={musicSource() === "spotify"}>
-        <div class="col-span-12">
-          <Panel padding={0}>
-            <iframe
-              src={playlistsSpotify[player.mood() as keyof typeof playlistsSpotify].url + "&theme=0"}
-              width="100%"
-              height="352"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              style={{ "border-radius": "12px", border: "none" }}
-            />
-          </Panel>
-        </div>
-      </Show>
-      <Show when={musicSource() === "youtube"}>
+      <Show when={musicSource() === "lofigirl" || musicSource() === "chillhop"}>
         <div class="col-span-12">
           <Panel padding={0}>
             <iframe
               ref={(el) => { setYoutubeIframe(el); setYoutubeIsPlaying(false); }}
-              src={playlistsYouTube[player.mood() as keyof typeof playlistsYouTube].url + "?enablejsapi=1&origin=" + window.location.origin}
+              src={(musicSource() === "lofigirl"
+                ? playlistsLofiGirl[player.mood() as keyof typeof playlistsLofiGirl]
+                : playlistsChillhop[player.mood() as keyof typeof playlistsChillhop]
+              ).url + "?enablejsapi=1&origin=" + window.location.origin}
               width="100%"
               height="280"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -10,7 +10,7 @@ export const [showTemplates, setShowTemplates] = createSignal(false);
 export interface WindowPosition { x: number; y: number }
 export const [windowPositions, setWindowPositions] = createStore<Record<string, WindowPosition>>({});
 
-export type MusicSource = "lofi" | "spotify" | "youtube";
+export type MusicSource = "lofi" | "lofigirl" | "chillhop";
 export const [musicSource, setMusicSource] = createSignal<MusicSource>("lofi");
 
 // YouTube iframe reference for external play/pause control

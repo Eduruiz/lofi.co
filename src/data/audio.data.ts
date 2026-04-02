@@ -358,26 +358,32 @@ const playlistsBase: { [key in SoundTrackMood]: SoundTrack[] } = {
     },
   ],
 };
-const playlistsSpotify = {
-  chill: {
-    url: "https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator",
-  },
-  jazzy: {
-    url: "https://open.spotify.com/embed/playlist/4dJSLiR8n2ZQUccpyXYKvE?utm_source=generator",
-  },
-  sleepy: {
-    url: "https://open.spotify.com/embed/playlist/1lVoSF8Bd6bQJaoEHFGegX?utm_source=generator",
-  },
-};
-const playlistsYouTube = {
+const playlistsLofiGirl = {
   chill: {
     url: "https://www.youtube.com/embed/jfKfPfyJRdk",
+    title: "lofi hip hop radio 📚 - beats to relax/study to",
   },
   jazzy: {
     url: "https://www.youtube.com/embed/HuFYqnbVbzY",
+    title: "lofi hip hop radio 🎙️ - beats to study/chill to",
   },
   sleepy: {
     url: "https://www.youtube.com/embed/DWcJFNfaw9c",
+    title: "lofi hip hop radio 😴 - beats to sleep/chill to",
+  },
+};
+const playlistsChillhop = {
+  chill: {
+    url: "https://www.youtube.com/embed/i6WzngxTnBA",
+    title: "Chillhop Radio - lofi hip hop beats to study/relax to",
+  },
+  jazzy: {
+    url: "https://www.youtube.com/embed/5yx6BWlEVcY",
+    title: "Chillhop Essentials Radio - chill beats",
+  },
+  sleepy: {
+    url: "https://www.youtube.com/embed/7NOSDKb0HlU",
+    title: "Chillhop Radio - late night vibes / calm lofi beats",
   },
 };
 const alarms: string[] = [
@@ -387,4 +393,4 @@ const alarms: string[] = [
   ALARMS_ROOT_URL + "Ringtone.mp3",
   ALARMS_ROOT_URL + "Soft.mp3",
 ];
-export { playlistsBase, playlistsSpotify, playlistsYouTube, effects, alarms };
+export { playlistsBase, playlistsLofiGirl, playlistsChillhop, effects, alarms };

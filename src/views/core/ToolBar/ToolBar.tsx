@@ -6,6 +6,7 @@ import { Slider } from "@kobalte/core/slider";
 
 import DarkModeToggle from "../../../components/DarkModeToggle";
 import { setShowAudioMixer, setShowPomodoro, setShowSceneSelector, setShowTemplates, musicSource, youtubeControls, youtubeIsPlaying } from "../../../stores/app";
+import { playlistsLofiGirl, playlistsChillhop } from "../../../data/audio.data";
 import player from "../../../stores/player";
 import { currentScene, night, setNight, pixelated, setPixelated } from "../../../stores/scene";
 import { hasSupportFor } from "../../../utils/set";
@@ -106,6 +107,14 @@ const LateralMenu: Component = () => {
           <div class="h-4 w-[1px] bg-white/20" />
           <p class="text-xs text-white/40 capitalize">{player.mood()} #{player.trackIndex() + 1}</p>
         </Show>
+        <Show when={musicSource() === "lofigirl"}>
+          <div class="h-4 w-[1px] bg-white/20" />
+          <p class="text-xs text-white/40 truncate max-w-[200px]">{playlistsLofiGirl[player.mood() as keyof typeof playlistsLofiGirl].title}</p>
+        </Show>
+        <Show when={musicSource() === "chillhop"}>
+          <div class="h-4 w-[1px] bg-white/20" />
+          <p class="text-xs text-white/40 truncate max-w-[200px]">{playlistsChillhop[player.mood() as keyof typeof playlistsChillhop].title}</p>
+        </Show>
 
         <Show when={supportForNight()}>
           <DarkModeToggle dark={night} setDark={setNight} />
@@ -132,15 +141,14 @@ const LateralMenu: Component = () => {
         />
 
         <Button
-          name={musicSource() === "youtube"
+          name={(musicSource() === "lofigirl" || musicSource() === "chillhop")
             ? (youtubeIsPlaying() ? "Pause" : "Play")
             : (player.audio.state === AudioState.PLAYING ? "Pause" : "Play")}
-          icon={musicSource() === "youtube"
+          icon={(musicSource() === "lofigirl" || musicSource() === "chillhop")
             ? (youtubeIsPlaying() ? <PauseIcon /> : <PlayIcon />)
             : (player.audio.state === AudioState.PLAYING ? <PauseIcon /> : <PlayIcon />)}
-          disabled={musicSource() === "spotify"}
           onClick={() => {
-            if (musicSource() === "youtube") {
+            if (musicSource() === "lofigirl" || musicSource() === "chillhop") {
               youtubeControls.toggle();
             } else {
               player.audio.state === AudioState.PLAYING ? player.controls.pause() : player.controls.play();
