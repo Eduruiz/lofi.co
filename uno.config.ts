@@ -7,21 +7,21 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () => `
-        .custom-scrollbar {
+        * {
           scrollbar-width: thin;
           scrollbar-color: rgba(255,255,255,0.15) transparent;
         }
-        .custom-scrollbar::-webkit-scrollbar {
+        *::-webkit-scrollbar {
           width: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
+        *::-webkit-scrollbar-track {
           background: transparent;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
+        *::-webkit-scrollbar-thumb {
           background: rgba(255,255,255,0.15);
           border-radius: 3px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        *::-webkit-scrollbar-thumb:hover {
           background: rgba(255,255,255,0.3);
         }
         [data-kb-slider-thumb] {

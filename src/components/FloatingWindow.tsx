@@ -58,7 +58,7 @@ const FloatingWindow: Component<Props> = (props) => {
 
   return (
     <div
-      class="z-20 fixed bg-bgd-100 border border-white/20 backdrop-blur-[30px] rounded-2xl overflow-y-auto custom-scrollbar"
+      class="z-20 fixed bg-bgd-100 border border-white/20 backdrop-blur-[30px] rounded-2xl overflow-y-auto"
       style={{
         width: `${props.width}px`,
         height: `${props.height}px`,

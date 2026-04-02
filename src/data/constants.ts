@@ -1,4 +1,3 @@
-// Use env var URL for remote assets
 const ASSETS_URL = import.meta.env.VITE_ASSETS_URL;
 
 export const REMOTE_ASSETS_URLS = {

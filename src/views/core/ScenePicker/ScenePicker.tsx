@@ -5,9 +5,29 @@ import effects from "../../../stores/effects";
 
 const SceneSelector: Component = () => {
   const [sceneSelected, setSceneSelected] = createSignal<SceneSet | null>(null);
+  let scrollRef: HTMLDivElement | undefined;
+  let velocity = 0;
+  let rafId: number | null = null;
+
+  const onWheel = (e: WheelEvent) => {
+    e.preventDefault();
+    velocity += e.deltaY * 0.3;
+    if (rafId) return;
+    const animate = () => {
+      if (!scrollRef || Math.abs(velocity) < 0.5) { rafId = null; return; }
+      scrollRef.scrollLeft += velocity;
+      velocity *= 0.85;
+      rafId = requestAnimationFrame(animate);
+    };
+    rafId = requestAnimationFrame(animate);
+  };
 
   return (
-    <div class="z-20 fixed inset-x-[17px] bottom-[80px] bg-bgd-100 rounded-[10px] border border-white/20 backdrop-blur-[30px] flex gap-4 px-4 py-3 max-w-screen overflow-auto">
+    <div
+      ref={scrollRef}
+      class="z-20 fixed inset-x-[17px] bottom-[80px] bg-bgd-100 rounded-[10px] border border-white/20 backdrop-blur-[30px] flex gap-4 px-4 py-3 max-w-screen overflow-auto"
+      onWheel={onWheel}
+    >
       <Show when={sceneSelected()}
         fallback={
           <For each={sceneSets}>
