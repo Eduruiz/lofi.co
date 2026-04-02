@@ -9,57 +9,36 @@
 - [x] Integração Spotify (embed, funciona em produção com HTTPS)
 - [x] Pomodoro timer com progress ring, seletor de alarme e session goal
 - [x] Floating windows com drag, minimizar animado e estado persistente
-- [x] Scrollbar customizada nos paineis
+- [x] Scrollbar customizada globalmente
 - [x] Toggle dia/noite nas cenas
 - [x] Fullscreen
 - [x] Track info no toolbar (mood + track number)
 - [x] Volume slider estilizado (Kobalte) no toolbar e hotspots das cenas
+- [x] Restaurar sessão (cena, música, efeitos, widgets e posições em localStorage)
+- [x] Templates (presets pré-definidos + salvar/deletar customizados)
+- [x] Atalhos de teclado (Space, M, ←→ prev/next, ↑↓ volume, 1-4 paineis, P pomodoro)
+- [x] Scroll horizontal suave no scene picker
+- [x] Otimização de CPU: apenas o vídeo ativo decodifica (inativos pausados com crossfade)
+- [x] Proteção por senha via Netlify Edge Function
 
 ## Próximas implementações
-
-### Restaurar sessão
-Persistir o estado atual automaticamente em localStorage pra que ao dar F5 ou voltar ao site tudo continue de onde parou. Estado a persistir:
-- Cena ativa (e variante dia/noite/pixel)
-- Music source (lofi/spotify/youtube) e mood selecionado
-- Volume da música e volumes dos efeitos
-- Posição dos floating windows
-- Estado do pomodoro (modo, tempo restante se pausado, ciclos completados)
-
-**Prioridade:** alta — qualidade de vida essencial
-
-### Templates (presets de ambiente)
-Salvar e restaurar combinações completas de: cena + mood + source + efeitos + volumes. Em um clique o usuário entra no "clima" desejado. Exemplos: "Café chuvoso", "Floresta noturna", "Deep focus".
-
-Possível implementação:
-- Alguns templates pré-definidos que já vem com o app
-- Usuário pode criar/editar/deletar os seus (persistidos em localStorage)
-- UI: floating window com lista de templates, botão de salvar estado atual como novo template
-
-**Prioridade:** alta — complementa o restaurar sessão
 
 ### YouTube personalizado
 O mixer já tem YouTube com livestreams pré-definidos por mood. A ideia aqui é uma ferramenta separada onde o usuário cola qualquer URL do YouTube e a gente embeda. Útil pra quem tem suas próprias playlists ou quer assistir algo específico enquanto trabalha.
 
-**Prioridade:** média — complementa o sistema de música atual
+**Prioridade:** média
 
 ### Notes
 Anotações rápidas dentro do app. Duas abordagens possíveis:
 - **Simples:** textarea persistido em localStorage, markdown básico
-- **Integração Obsidian:** ler/escrever arquivos .md de um vault local via File System Access API (só funciona em Chromium). Seria diferencial mas limita compatibilidade.
-
-**Decisão pendente:** vale a integração com Obsidian ou um notepad simples resolve?
+- **Integração Obsidian:** ler/escrever arquivos .md de um vault local via File System Access API (só funciona em Chromium)
 
 **Prioridade:** média
 
 ### Google Calendar
-Embed ou integração com Google Calendar pra visualizar eventos do dia. Requer OAuth com Google (client ID, redirect, consent screen). Escopo mínimo: exibir eventos do dia/semana, sem criar/editar.
+Embed ou integração com Google Calendar pra visualizar eventos do dia. Requer OAuth com Google. Escopo mínimo: exibir eventos do dia/semana, sem criar/editar.
 
 **Prioridade:** baixa — complexidade alta de setup (OAuth), retorno questionável vs ter o calendar aberto em outra aba
-
-### Melhorias gerais
-
-- **Atalhos de teclado** — space pra play/pause, M pra mute, etc.
-- **Track info YouTube** — hardcodar nomes dos livestreams (são só 3 fixos)
 
 ## Descartado
 
