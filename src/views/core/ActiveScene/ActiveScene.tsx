@@ -1,4 +1,4 @@
-import { For, type Component, createMemo, Show, createSignal, createEffect } from "solid-js";
+import { For, type Component, createMemo, Show, createSignal, createEffect, on, onMount } from "solid-js";
 import clsx from 'clsx';
 import { HoverCard } from "@kobalte/core/hover-card";
 import { Slider } from "@kobalte/core/slider";
@@ -51,28 +51,40 @@ const ActiveScene: Component = () => {
       <For each={Object.keys(currentScene().variants)}>
         {(variant) => {
           let videoRef: HTMLVideoElement | undefined;
-          const isActive = () => variant === currentVariant();
-          const [visible, setVisible] = createSignal(isActive());
+          const [visible, setVisible] = createSignal(variant === currentVariant());
 
-          createEffect(() => {
+          let pauseTimer: ReturnType<typeof setTimeout> | null = null;
+
+          onMount(() => {
             if (!videoRef) return;
-            if (isActive()) {
-              videoRef.play().catch(() => {});
+            if (currentVariant() === variant) videoRef.play().catch(() => {});
+          });
+
+          createEffect(on([currentVariant, currentScene], ([cv]) => {
+            if (!videoRef) return;
+            if (cv === variant) {
+              if (pauseTimer !== null) { clearTimeout(pauseTimer); pauseTimer = null; }
               setVisible(true);
+              videoRef.play().catch(() => {});
             } else {
               setVisible(false);
-              // Pause after fade-out completes so the frame stays visible during transition
-              setTimeout(() => { if (!isActive()) videoRef?.pause(); }, 800);
+              pauseTimer = setTimeout(() => {
+                pauseTimer = null;
+                if (currentVariant() !== variant) videoRef?.pause();
+              }, 400);
             }
-          });
+          }, { defer: true }));
 
           return (
             <div class="background-video">
-              <video ref={videoRef} src={currentScene().variants[variant]} preload="auto" loop muted playsinline
-                class={clsx(
-                  "w-full h-full transition-opacity duration-700",
-                  visible() ? "opacity-100" : "opacity-0"
-                )}
+              <video
+                ref={videoRef}
+                src={currentScene().variants[variant]}
+                preload="auto"
+                loop
+                muted
+                playsinline
+                class={clsx("w-full h-full transition-opacity duration-300", visible() ? "opacity-100" : "opacity-0")}
               ></video>
             </div>
           );
