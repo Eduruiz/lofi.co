@@ -360,29 +360,29 @@ const playlistsBase: { [key in SoundTrackMood]: SoundTrack[] } = {
 };
 const playlistsLofiGirl = {
   chill: {
-    url: "https://www.youtube.com/embed/jfKfPfyJRdk",
+    url: "https://www.youtube-nocookie.com/embed/jfKfPfyJRdk",
     title: "lofi hip hop radio 📚 - beats to relax/study to",
   },
   jazzy: {
-    url: "https://www.youtube.com/embed/HuFYqnbVbzY",
+    url: "https://www.youtube-nocookie.com/embed/HuFYqnbVbzY",
     title: "lofi hip hop radio 🎙️ - beats to study/chill to",
   },
   sleepy: {
-    url: "https://www.youtube.com/embed/DWcJFNfaw9c",
+    url: "https://www.youtube-nocookie.com/embed/DWcJFNfaw9c",
     title: "lofi hip hop radio 😴 - beats to sleep/chill to",
   },
 };
 const playlistsChillhop = {
   chill: {
-    url: "https://www.youtube.com/embed/i6WzngxTnBA",
+    url: "https://www.youtube-nocookie.com/embed/i6WzngxTnBA",
     title: "Chillhop Radio - lofi hip hop beats to study/relax to",
   },
   jazzy: {
-    url: "https://www.youtube.com/embed/5yx6BWlEVcY",
+    url: "https://www.youtube-nocookie.com/embed/5yx6BWlEVcY",
     title: "Chillhop Essentials Radio - chill beats",
   },
   sleepy: {
-    url: "https://www.youtube.com/embed/7NOSDKb0HlU",
+    url: "https://www.youtube-nocookie.com/embed/7NOSDKb0HlU",
     title: "Chillhop Radio - late night vibes / calm lofi beats",
   },
 };

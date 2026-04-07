@@ -51,9 +51,13 @@ const App: Component = () => {
         player.controls.setVolume(Math.max(0, player.audio.volume - 0.05));
         break;
       case "m":
-      case "M":
-        player.controls.setMuted(!player.audio.muted);
+      case "M": {
+        const newMuted = !player.audio.muted;
+        player.controls.setMuted(newMuted);
+        if (musicSource() === "lofigirl" || musicSource() === "chillhop")
+          newMuted ? youtubeControls.mute() : youtubeControls.unmute();
         break;
+      }
       case "1":
         setShowAudioMixer(!showAudioMixer());
         break;

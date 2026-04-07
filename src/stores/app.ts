@@ -34,5 +34,24 @@ export const youtubeControls = {
   },
   toggle: () => {
     youtubeIsPlaying() ? youtubeControls.pause() : youtubeControls.play();
-  }
+  },
+  setVolume: (volume: number) => {
+    const iframe = youtubeIframe();
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "setVolume", args: [Math.round(volume * 100)] }),
+        '*'
+      );
+    }
+  },
+  mute: () => {
+    const iframe = youtubeIframe();
+    if (iframe?.contentWindow)
+      iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+  },
+  unmute: () => {
+    const iframe = youtubeIframe();
+    if (iframe?.contentWindow)
+      iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+  },
 };

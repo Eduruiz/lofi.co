@@ -65,7 +65,10 @@ const LateralMenu: Component = () => {
 
   const [showVolumeSlider, setShowVolumeSlider] = createSignal(false);
   const volume = () => [player.audio.volume];
-  const changeVolume = (v: number[]) => player.controls.setVolume(v[0]);
+  const changeVolume = (v: number[]) => {
+    player.controls.setVolume(v[0]);
+    if (musicSource() !== "lofi") youtubeControls.setVolume(v[0]);
+  };
 
   const VolumeSlider: VoidComponent = () => (
     <div class="absolute bottom-[60px] left-[50%] transform translate-x-[-50%] bg-bgd-100 rounded-[10px] h-[52px] w-[180px] border border-white/20 backdrop-blur-[30px] flex items-center px-4">
@@ -178,7 +181,11 @@ const LateralMenu: Component = () => {
           active={player.audio.muted}
           name="Mute"
           icon={<VolumeMuteIcon />}
-          onClick={() => player.controls.setMuted(!player.audio.muted)}
+          onClick={() => {
+            const newMuted = !player.audio.muted;
+            player.controls.setMuted(newMuted);
+            if (musicSource() !== "lofi") newMuted ? youtubeControls.mute() : youtubeControls.unmute();
+          }}
         />
 
         <Divider />
